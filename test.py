@@ -1,6 +1,6 @@
 print('Hello PyCharm')
 
-print('This is test file, if you understand that write the answer')
+print('This is the test file, if you understand that write the answer')
 
 while True:
     answer = input('Write "Yes" or "No": ')
