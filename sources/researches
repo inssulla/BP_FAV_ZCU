@@ -18,7 +18,6 @@ Unchecked:
 - Multiple Sound Sources Localization with Frame-by-Frame Component Removal of Statistically Dominant Source
 (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6264069/)
 
-
 - 3D Localization and Tracking of Objects Using Miniature Microphones
 (https://file.scirp.org/pdf/WSN20110500003_94070825.pdf)
 
@@ -33,6 +32,11 @@ Unchecked:
 
 - Drone Audition: Sound Source Localization Using On-Board Microphones
 (https://ieeexplore.ieee.org/abstract/document/9670693/keywords#keywords)
+
+- Detecting the Direction of Sound With a Compact Microphone Array
+(http://cs229.stanford.edu/proj2014/Rajewski,Detecting%20The%20Direction%20Of%20Sound%20With%20A%20Compact%20Microphone%20Array.pdf)
+
+- (https://patents.google.com/patent/US8983089B1/en)
 
 
 Checked:
