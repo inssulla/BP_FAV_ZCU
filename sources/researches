@@ -1,4 +1,13 @@
+Sound Source Localization (SSL) using multiple microphones
+
+https://scholar.google.cz/scholar?hl=cs&as_sdt=0%2C5&as_vis=1&q=Sound+Source+Localization+using+Multiple+Microphones&btnG=  !
+
+
+
 Unchecked:
+
+- 3D Multiple Sound Source Localization by Proposed T-Shaped Circular Distributed Microphone Arrays in Combination with GEVD and Adaptive GCC-PHAT/ML Alg
+(https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8840506/)
 
 - Sound Localization Based on Acoustic Source Using Multiple Microphone Array in an Indoor Environment
 (https://www.researchgate.net/publication/359216342_Sound_Localization_Based_on_Acoustic_Source_Using_Multiple_Microphone_Array_in_an_Indoor_Environment)
@@ -19,9 +28,11 @@ Unchecked:
 - Sound source localization using multiple ad hoc distributed microphone arrays
 (https://asa.scitation.org/doi/10.1121/10.0011811)
 
-- 
-()
+- Indoor Sound Source Localization With Probabilistic Neural Network
+(https://ieeexplore.ieee.org/abstract/document/8234649/keywords#keywords)
 
+- Drone Audition: Sound Source Localization Using On-Board Microphones
+(https://ieeexplore.ieee.org/abstract/document/9670693/keywords#keywords)
 
 
 Checked:
