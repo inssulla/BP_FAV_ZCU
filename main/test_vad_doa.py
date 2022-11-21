@@ -3,7 +3,7 @@ import sys
 import webrtcvad
 import numpy as np
 #from pixel_ring import pixel_ring
-from leds import pixel_ring
+#from leds import pixel_ring
 from test_direction import MicArray
 
 
@@ -32,7 +32,7 @@ def main():
                     if speech_count > (doa_chunks / 2):
                         frames = np.concatenate(chunks)
                         direction = mic.get_direction(frames)
-                        pixel_ring.set_direction(self, direction)
+                        #pixel_ring.set_direction(self, direction)
                         print('\n{}'.format(int(direction)))
 
                     speech_count = 0
@@ -41,7 +41,7 @@ def main():
     except KeyboardInterrupt:
         pass
         
-    pixel_ring.off()
+    #pixel_ring.off()
 
 
 if __name__ == '__main__':
