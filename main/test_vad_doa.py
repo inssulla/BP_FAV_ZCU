@@ -17,10 +17,6 @@ CHANNELS = 4
 VAD_FRAMES = 10     # ms
 DOA_FRAMES = 200    # ms
 
-driver = apa102.APA102(num_led=12)
-power = LED(5)
-#power.on()
-
 COLORS_RGB = dict(
         blue=(0, 0, 255),
         green=(0, 255, 0),
@@ -31,6 +27,11 @@ COLORS_RGB = dict(
         white=(255, 255, 255),
         yellow=(255, 255, 51),
     )
+
+driver = apa102.APA102(num_led=12)
+power = LED(5)
+#power.on()
+
 
 def rounding(n, decimals=0):
     multiplier = 10 ** decimals
@@ -55,23 +56,12 @@ def set_color(color, direction):
     driver.clear_strip()
 
 def main():
-    vad = webrtcvad.Vad(1)
+    vad = webrtcvad.Vad(3)
 
     speech_count = 0
     chunks = []
     doa_chunks = int(DOA_FRAMES / VAD_FRAMES)
 
-    COLORS_RGB = dict(
-        blue=(0, 0, 255),
-        green=(0, 255, 0),
-        orange=(255, 128, 0),
-        pink=(255, 51, 153),
-        purple=(128, 0, 128),
-        red=(255, 0, 0),
-        white=(255, 255, 255),
-        yellow=(255, 255, 51),
-    )
-    
     try:
         with MicArray(RATE, CHANNELS, RATE * VAD_FRAMES / 1000)  as mic:
             for chunk in mic.read_chunks():
@@ -96,8 +86,6 @@ def main():
 
     except KeyboardInterrupt:
         pass
-        
-   # pixel_ring.off()
 
 
 if __name__ == '__main__':
