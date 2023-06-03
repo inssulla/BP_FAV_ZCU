@@ -59,7 +59,12 @@ def solar_calculating(sensors_value):
 if __name__ == '__main__':
 
     sensors_value = input_values()
-
     solar_direction = solar_calculating(sensors_value)
-    print(f'Direction: {solar_direction}')
+
+    if solar_direction > 180:
+        solar_direction = solar_direction - 360
+    elif solar_direction < -180:
+        solar_direction = 360 + solar_direction
+
+    print(f'\nOutput direction: {solar_direction}')
 
