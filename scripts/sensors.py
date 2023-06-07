@@ -37,11 +37,11 @@ def solar_calculating(sensors_value):
             right_sensor_index = max_index + 1
 
 
-        if sensors[max_index] == sensors_value[right_sensor_index]:
+        if sensors_value[max_index] == sensors_value[right_sensor_index]:
             max_value_sensor = sensors[max_index]
             moving_angle = 45
             result_angle = max_value_sensor + moving_angle
-        elif sensors[max_index] == sensors_value[left_sensor_index]:
+        elif sensors_value[max_index] == sensors_value[left_sensor_index]:
             max_value_sensor = sensors[max_index]
             moving_angle = -45
             result_angle = max_value_sensor + moving_angle
