@@ -10,6 +10,12 @@ from pvrecorder import PvRecorder
 # import simulation as s
 from simulation import calculate_camera_direction 
 from simulation import calculate_solar_direction
+
+import apa102
+import gcc_phat
+import test_direction
+
+
 import time
 
 
@@ -39,7 +45,12 @@ class PicovoiceDemo(Thread):
     def _wake_word_callback(self): 
         print('Wake word detected\n')
         self.recorder.stop()
+
+
+        #test_main()
         calculate_camera_direction()
+
+
         self.start_time = time.time()
         self.recorder.start()
        
