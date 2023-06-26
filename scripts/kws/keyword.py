@@ -7,6 +7,11 @@ from threading import Thread
 from test_picovoice import Picovoice
 from pvrecorder import PvRecorder
 
+# import simulation as s
+from simulation import calculate_camera_direction 
+from simulation import calculate_solar_direction
+import time
+
 
 class PicovoiceDemo(Thread):
     def __init__(
@@ -33,24 +38,43 @@ class PicovoiceDemo(Thread):
     # Funkce ktera probehne po KWS
     def _wake_word_callback(self): 
         print('Wake word detected\n')
+        self.recorder.stop()
+        calculate_camera_direction()
+        self.start_time = time.time()
+        self.recorder.start()
+       
         
         
         
     def run(self):
-        recorder = None
+        self.recorder = None
         try:
-            recorder = PvRecorder(device_index=self._device_index, frame_length=self._picovoice.frame_length)
-            recorder.start()
+            self.recorder = PvRecorder(device_index=self._device_index, frame_length=self._picovoice.frame_length)
+            self.recorder.start()
             print('[Listening ...]')
+            self.start_time = time.time()
+            self.start_time_v2 = 10
             while True:
-                pcm = recorder.read()
+                pcm = self.recorder.read()
                 self._picovoice.process(pcm)
+
+                if (time.time() - self.start_time) > 10:
+                    print((time.time() - self.start_time), '+')
+
+                    if (time.time() - self.start_time_v2) > 10:
+                        self.recorder.stop()
+                        calculate_solar_direction()
+                        self.start_time_v2 = time.time()
+                        self.recorder.start()
+                else:
+                    print((time.time() - self.start_time))
+
         except KeyboardInterrupt:
             sys.stdout.write('\b' * 2)
             print('Stopping ...')
         finally:
-            if recorder is not None:
-                recorder.delete()
+            if self.recorder is not None:
+                self.recorder.delete()
                 
             self._picovoice.delete()
 
@@ -60,7 +84,7 @@ def main():
     parser.add_argument(
         '--access_key',
         help='AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)',
-        required=True)
+        required=False,default ='jmO3cG5bPAg+eCRAa96TgxAzUWU42E+ZY/WzhHBPQAf9JgdLB3WQyg==')
 
     parser.add_argument('--audio_device_index', help='Index of input audio device.', type=int, default=-1)
     args = parser.parse_args()

@@ -3,6 +3,7 @@ import math
 import random
 
 
+
 def solar_input_values():
     status = input('Select process: Manual = 0, Random values = 1 \n')
 
