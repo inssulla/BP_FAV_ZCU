@@ -11,11 +11,6 @@ from pvrecorder import PvRecorder
 from simulation import calculate_camera_direction 
 from simulation import calculate_solar_direction
 
-import apa102
-import gcc_phat
-import test_direction
-
-
 import time
 
 
