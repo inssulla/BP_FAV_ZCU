@@ -4,10 +4,15 @@ import random
 
 
 
-def solar_input_values():
-    status = input('Select process: Manual = 0, Random values = 1 \n')
+def solar_input_values(status, array):
+    # status = input('Select process: Manual = 0, Random values = 1 \n')
 
-    if int(status) == 0:
+    if array != 'default':
+        array = array.split(',')
+        for i in range(len(array)):
+            array[i] = float(array[i])
+        return list(array)
+    elif int(status) == 0:
         array = input('Add array in format: float0, float1, float2, float3: \n')
         print(f'Input: {array}')
         array = array.split(',')
@@ -57,8 +62,8 @@ def solar_calculating(sensors_value):
         'Error'
 
 
-def calculate_solar_direction():
-    sensors_value = solar_input_values()
+def calculate_solar_direction(status, array = 'default'):
+    sensors_value = solar_input_values(status, array)
     solar_direction = solar_calculating(sensors_value)
 
     if solar_direction > 180:
@@ -68,14 +73,18 @@ def calculate_solar_direction():
 
     print(f'\nOutput direction: {solar_direction}\n')
 
+    return solar_direction, sensors_value
+
 
 # --------------------
 
 
-def mics_input_values():
-    status = input('Select process: Manual = 0, Random values = 1 \n')
+def mics_input_values(status, input_angle, camera_position):
+    # status = input('Select process: Manual = 0, Random values = 1 \n')
 
-    if int(status) == 0:
+    if input_angle != 'default' or camera_position != 'default':
+        return float(input_angle), float(camera_position)
+    elif int(status) == 0:
         input_angle = float(input('Write mics sound source angle (0,360): \n'))
         camera_position = float(input('Write start camera position (-180,180): \n'))
         return input_angle, camera_position
@@ -123,10 +132,10 @@ def angle_calculating(input_angle, camera_position):   # return current_camera_p
         return current_camera_position
 
 
-def calculate_camera_direction():
+def calculate_camera_direction(status, input_angle = 'default', camera_position = 'default'):
 
     # Correct work in case when 0 angel in y
-    input_angle, camera_position = mics_input_values()  # input mics angle, current camera position
+    input_angle, camera_position = mics_input_values(status,input_angle,camera_position)  # input mics angle, current camera position
 
     print(f'Mics input angle: {input_angle} \nCamera position: {camera_position}')
     current_camera_position = angle_calculating(input_angle, camera_position)
@@ -138,6 +147,8 @@ def calculate_camera_direction():
 
     print(f'\nOutput direction: {current_camera_position}\n')
 
+    return current_camera_position, input_angle, camera_position
+
 
 
 if __name__ == '__main__':
@@ -145,7 +156,8 @@ if __name__ == '__main__':
     status = input('Select status: Idle = 0, Active = 1 \n')
 
     if int(status) == 0:
-        calculate_solar_direction()
+        status = input('Select process: Manual = 0, Random values = 1 \n')
+        calculate_solar_direction(status)
     elif int(status) == 1:
-        calculate_camera_direction()
-
+        status = input('Select process: Manual = 0, Random values = 1 \n')
+        calculate_camera_direction(status)

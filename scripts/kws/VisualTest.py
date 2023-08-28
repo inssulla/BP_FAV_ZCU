@@ -2,6 +2,8 @@
 import tkinter
 import time
 from tkinter import Button
+from tkinter import *
+from PIL import ImageTk, Image
 from tkinter import messagebox
 
 Window_Width = 800
@@ -53,9 +55,34 @@ def animate_ball(xinc, yinc):
             yinc = -yinc
 
 
+
+
+
+def display_text():
+   global entry
+   string= entry.get()
+   # label.configure(text=string)
+   print(string)
+
+#Initialize a Label to display the User Input
+label=Label(Animation_canvas, text="", font=("Courier 22 bold"))
+label.pack()
+
+
+#Create an Entry widget to accept User Input
+entry = Entry(Animation_canvas, width= 40)
+entry.pack()
+entry.place(x = 100,y = 150 )
+
+
+
+
 # Animation_Window = create_animation_window()
 # Animation_canvas = create_animation_canvas(Animation_Window)
-B = Button(Animation_Window, text = "Start", command = test)
+# B = Button(Animation_Window, text = "Start", command = display_text)
+# B.place(x = 100,y = 100 )
+
+B = Button(Animation_canvas, text = "Start", command = display_text)
 B.place(x = 100,y = 100 )
 # animate_ball(Animation_Window, Animation_canvas, Ball_min_movement, Ball_min_movement)
 
