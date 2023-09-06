@@ -22,7 +22,7 @@ def solar_input_values(status, array):
     elif int(status) == 1:
         array = []
         for f in range(4):
-            array.append(random.random() * 1000)
+            array.append(int(random.random() * 1000))
         print(f'Input: {array}')
         return list(array)
     else:
@@ -90,7 +90,7 @@ def mics_input_values(status, input_angle, camera_position):
         return input_angle, camera_position
     elif int(status) == 1:
         input_angle = random.random() * 360
-        camera_position = random.random() * 360
+        camera_position = random.uniform(-1, 1) * 180
         return input_angle, camera_position
     else:
         mics_input_values()
@@ -103,7 +103,7 @@ def angle_calculating(input_angle, camera_position):   # return current_camera_p
     # Robot params
     a = 1  # between center and mics
     b = 15  # between center and sound source (distance)
-    ab_angle = 15  # angel between center and mics
+    ab_angle = 30  # angel between center and mics
 
     angel_value = 180 - input_angle  # + right side from mic, - left side from mic
     mic_angle = abs(angel_value)
@@ -119,7 +119,7 @@ def angle_calculating(input_angle, camera_position):   # return current_camera_p
         current_camera_position = camera_position + moving_angle
         return current_camera_position
     elif angel_value == 180:
-        moving_angle = ab_angle
+        moving_angle = -ab_angle
         current_camera_position = camera_position + moving_angle
         return current_camera_position
     elif angel_value > 0:
