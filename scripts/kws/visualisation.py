@@ -576,10 +576,11 @@ def refresh(Window):
 
     # camera_position = int(entry1.get())
     # mic_input = int(entry2.get())
-    if entry2.get() == '':
-        from_angle = int(entry1.get())
-    else:
-        if state_value == 0:
+
+    if state_value == 0:
+        if entry3.get() == '':
+            from_angle = 0
+        else:
             if process_value == 0:
                 sim_value = simulation.calculate_solar_direction(process_value, entry3.get())
                 from_angle = 0
@@ -595,7 +596,10 @@ def refresh(Window):
             entry2['state'] = DISABLED
             label2_value.configure(text='')
 
-        elif state_value == 1:
+    elif state_value == 1:
+        if entry2.get() == '':
+            from_angle = int(entry1.get())
+        else:
             if process_value == 0:
                 sim_value = simulation.calculate_camera_direction(process_value, int(entry2.get()), int(entry1.get()))
                 from_angle = int(entry1.get())
@@ -632,7 +636,7 @@ def refresh(Window):
         Animation_canvas.create_line(x1, y1, x2, y2, width=1)  # draw the line for segment
         in_degree = in_degree + 10  # increment for next segment
 
-    if entry2.get() != '':
+    if entry2.get() != '' or entry3.get() != '':
         # Output angel shape
         in_radian = math.radians(to_angle)
         x1 = Start_XPosition + ratio * r1 * math.sin(in_radian)
