@@ -1,0 +1,448 @@
+% *****************************************************************************
+%
+%        FASThesis Manual
+%        (FASThesis Class File Documentation)
+%
+%        Faculty of Applied Sciences
+%        University of West Bohemia
+%
+%        Manual & Explanatory Document
+%        Copyright (c) 2022-2023 Kamil Ekštein, Dept. of Computer Science
+%        and Engineering, Faculty of Applied Sciences, UWB
+%
+%        Version:  0.7
+%		 Encoding: UTF-8
+%		 TeXer:    pdflatex
+%
+%        Last modification on 28-Feb-2023 by KE
+%
+% *****************************************************************************
+
+% _____________________________________________________________________________
+%
+%
+%	     DOCUMENT HEADER
+%
+% _____________________________________________________________________________
+%
+\documentclass[czech, ba, kky, he, iso690numb]{fasthesis}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.fig,.eps}
+\title{Multimodální rotace robota s detekcí klíčového slova}
+\author{Yauheni}{Varabyou}{}{}
+\supervisor{Ing. Martin Bulín, M.Sc.}
+%\supervisor{Ing. Tomáš Marný}
+\assignment{zadani.pdf}
+\signdate{22}{01}{2024}{V Plzni}% << the longest local name in the Czech Rep.
+
+\addbibresource{manual.bib}% << the file with the bibliographical database to be used throughout the text
+% _____________________________________________________________________________
+%
+%
+%	     DOCUMENT FRONTMATTER TEXTS
+%
+% _____________________________________________________________________________
+%
+\abstract{Dokument představuje třídu (class file) \LaTeX{}ového dokumentu \filename"fasthesis",
+která se používá k sazbě kvalifikačních prací na Fakultě aplikovaných věd Západočeské univerzity v Plzni. Vysvětluje, jak správně používat šablonu kvalifikační práce \filename"fasthesis" pro sázecí systém \LaTeX{} a jak podobu výsledného dokumentu ovlivňují různé přepínače a příkazy, kterými se sazba při použití této šablony řídí.
+
+Kromě toho, že tento abstrakt skutečně stručně shrnuje obsah dokumentu, tak také slouží jako ukázka, jak by měl abstrakt vypadat. Délka abstraktu by se měla pohybovat mezi 100 a 300 slovy, a ačkoliv není dáno žádné konkrétní omezení, určitě by neměla překročit polovinu stránky A4. Abstrakt má čtenáři poskytnout představu o tom, co se v dokumentu dočte (a tedy jestli vůbec má smysl se do čtení pouštět).}
+% *** English abstract ***
+{This document presents the \LaTeX{} document class \filename"fasthesis", which is used for the typesetting of theses at the Faculty of Applied Sciences, University of West Bohemia in Pilsen. It explains how to properly use the \filename"fasthesis" template for \LaTeX{} typesetting system and how the resulting document is affected by various switches and commands that control the typesetting process when using this template.
+
+Not only this abstract really breifly summarises the document's contents, it also serves as an example of what an abstract might look like. The length of the abstract should be between 100 and 300 words, and although no specific limit is given, it should certainly not exceed half an A4 page. The abstract is intended to give the reader a rough idea of what they will read in the document (and therefore whether it is even worth getting started with it at all).}
+\keywords{šablona kvalifikační práce, sazba, DTP, \LaTeX}
+% _____________________________________________________________________________
+%
+%        ACKNOWLEDGEMENT
+% _____________________________________________________________________________
+%
+\acknowledgement{Na tomto místě bych rád poděkoval svému předchůdci v roli \uv{local wizarda}, člověku,
+který připravil první prakticky použitelnou \LaTeX{}ovou šablonu kvalifikační práce na Katedře informatiky
+a výpočetní techniky Fakulty aplikovaných věd Západočeské univerzity v Plzni, panu Ing. Petru Lobazovi, Ph.D. Asi ještě větší a sr\-deč\-něj\-ší po\-dě\-ko\-vá\-ní si zaslouží úžasný člověk, který mě s \TeX{}em před téměř třiceti lety seznámil: pan Doc. RNDr. František Ježek, CSc.
+
+Rád bych na tomto místě poděkoval i dalšímu matematikovi, Ing. Janu Pospíšilovi, Ph.D., který mne neúnavně přesvědčoval, že FAV novou šablonu kvalifikačních prací potřebuje jako sůl a následně mě nutil na ní pracovat (a samozřejmě přispěl řadou podnětných připomínek).
+
+Nemenší díky si zaslouží mí drazí kolegové z Katedry informatiky a výpočetní techniky, kteří svojí konstruktivní
+kritikou významně přispěli ke konečné podobě šablony -- jmenovitě jsou to (v abecedním pořadí):
+Doc. Ing. Přemysl Brada, M.Sc., Ph.D.,
+Doc. Ing. Pavel Herout, Ph.D.,
+Ing. František Pártl a
+Ing. Petr Vaněček, Ph.D.
+
+V neposlední řadě si poděkování zaslouží také studenti, kteří nově vzniklou šablonu testovali: Bc. Veronika Báčová a Petra Ocelíková.}
+% _____________________________________________________________________________
+%
+%
+%	     DOCUMENT TEXT BEGINNING
+%
+% _____________________________________________________________________________
+%
+\begin{document}
+\frontpages[tm] % or notm if the `trademark' declaration is not needed
+\tableofcontents
+% 
+% -x---- ADDITIONAL COLOUR DEFINITIONS ----------------------------------------
+%
+\makeatletter%
+\ifx\FASThesis@style\c@fullcolor%
+	\definecolor{fascolor}{cmyk}{0.06, 0.27, 1.0, 0.12}%
+	\definecolor{fascolordk}{cmyk}{0.05, 0.28, 1.0, 0.24}%
+\else%
+	\definecolor{fascolor}{cmyk}{0, 0, 0, 0.6}%
+	\definecolor{fascolordk}{cmyk}{0, 0, 0, 0.75}%
+\fi%
+\makeatother%
+\lstdefinestyle{plainsrc}{
+	backgroundcolor=\color{fascolor!10},
+	basicstyle=\ttzfamily\footnotesize,
+	numberstyle=\tiny\color{fascolordk},
+	numbers=left,
+	numbersep=5pt,
+	keepspaces=true,
+	tabsize=2,
+	extendedchars=true,
+	literate={á}{{\'a}}1 {č}{{\v{c}}}1 {ď}{{\v{d}}}1 {é}{{\'e}}1 {ě}{{\v{e}}}1 {è}{{\`{e}}}1 {í}{{\'{\i}}}1 {ľ}{{\v{l}}}1 {ň}{{\v{n}}}1 {ó}{{\'o}}1 {ŕ}{{\'r}}1 {ř}{{\v{r}}}1 {š}{{\v{s}}}1 {ť}{{\v{t}}}1 {ú}{{\'u}}1 {ů}{{\r{u}}}1 {ý}{{\'y}}1 {ž}{{\v{z}}}1
+	{Á}{{\'A}}1 {Č}{{\v{C}}}1 {Ď}{{\v{D}}}1 {É}{{\'E}}1 {Ě}{{\v{E}}}1 {È}{{\`{E}}}1 {Í}{{\'I}}1 {Ľ}{{\v{L}}}1 {Ň}{{\v{N}}}1 {Ó}{{\'O}}1 {Ŕ}{{\'R}}1 {Ř}{{\v{R}}}1 {Š}{{\v{Š}}}1 {Ť}{{\v{T}}}1 {Ú}{{\'U}}1 {Ů}{{\r{U}}}1 {Ý}{{\'Y}}1 {Ž}{{\v{Z}}}1
+}
+% -x---- END OF ADDITIONAL COLOUR DEFINITIONS ---------------------------------
+% _____________________________________________________________________________
+%
+%
+%        CHAPTER
+%
+% _____________________________________________________________________________
+%
+\chapter*[Předmluva]{Předmluva}
+
+Milý autore/milá autorko,\\[\baselineskip]
+tímto se do Tvých schopných rukou dostává \emph{šablona kvalifikační práce} na Fakultě aplikovaných věd Západočeské univerzity v Plzni. Tato šablona je určena k dosažení jednotného vzhledu kvalifikačních prací sázených v typografickém systému \LaTeX. Při jejím návrhu jsem se řídil zejména tím, aby bylo její používání pro (často nezkušeného) autora textu co nejsnazší, ale aby zároveň výsledný produkt odpovídal zásadám a pravidlům moderní sazby technických dokumentů, působil dostatečně reprezentativně a zároveň lehce a přirozeně, a přitom byl přehledný a dobře čitelný. Grafická podoba šablony pak reflektuje pravidla stanovená \emph{Manuálem jednotného vizuálního stylu} Západočeské univerzity v~Plzni\footnote{Z tohoto manuálu vychází kromě podoby logotypů univerzity a jejích součástí zejména barevnost a použití konkrétních fontů.}.
+
+Při tvorbě šablony jsem vycházel z obdobných šablon, které jsou autorům kvalifikačních prací k dispozici na významných českých i zahraničních vysokých školách. Snažil jsem se je důkladně analyzovat, abych \uv{to dobré} začlenil i do naší šablony, a naopak \uv{tomu špatnému} abych se vyhnul. Grafické a typografické prvky, vyskytující se v těchto šablonách, jsem hodnotil na základě poznatků ze tří skvělých knih: Graphic Design Now od Charlotte a Petera Fiellových, Jazyk grafického designu~\cite{Grondin} od Richarda Poulina a Typografický manuál~\cite{Hahmann} od Vladimíra Berana.
+
+Výše popsaným způsobem šablonu ovlivnily šablony kvalifikačních prací Kalifornského technologického institutu (Caltech), Harvardovy univerzity, Princetonské univerzity, Newyorské univerzity, Univerzity v Oslu, Vysokého učení technického v Brně, Matematicko-fyzikální fakulty Univerzity Karlovy, Fakulty informatiky Masarykovy univerzity a řada dalších. Důležitou roli pochopitelně sehrála i naše předchozí \LaTeX{}ová šablona, připravená před řadou let Petrem Lobazem.
+
+Tato šablona by měla řešit prakticky všechny zásadní aspekty sazby kvalifikační práce (a pokud je přímo neřeší, vždy je možné je řešit ve vlastní režii použitím příkazů \TeX{}u), nicméně -- protože je zatím docela nová a \uv{nezajetá} -- může se stát, že v ní odhalíš chybu, nedostatek, nějaké nekonzistentní chování apod. Pokud se tak stane, budu rád, když mi napíšeš, o co jde a jak se problém projevuje, e-mailem na adresu \url{kekstein@kiv.zcu.cz} a já se pokusím zajistit co možná nejdříve nápravu. Někdy se ovšem může jednat o situaci, kterou programátoři popisují obvykle (v anglickém originále) větou: \uv{It's not a bug, it's a feature.}
+
+Doufám, že se Ti s touto šablonou bude pracovat dobře a pomůže Ti vytvořit perfektní kvalifikační práci, která bude následně úspěšně obhájena. K tomu Ti přeju hodně štěstí a držím palce.
+
+\begin{flushright}
+\textit{Kamil Ekštein},\\
+autor šablony
+\end{flushright}
+% _____________________________________________________________________________
+%
+%
+%        CHAPTER
+%
+% _____________________________________________________________________________
+%
+\chapter{Hardware}
+Jedním z úkolů práce bylo ukázat, že je možné pomocí veřejně dostupných technologií vytvořit efektivní zařízení. Pro tento a další účely byl v práci testován a použit následující hardware:
+\begin{enumerate}
+    \item Raspberry Pi 4 model B
+    \item ReSpeaker 4-Mic Array pole čtyř mikrofonů
+    \item Krokový motor NEMA17 (47 mm) model 42HD6021-03
+    \item Světelné senzory TSL2591 v počtu 4 kusů
+    \item Solární panel
+\end{enumerate}
+%
+%
+%
+\section{Raspberry Pi 4 model B}
+Raspberry Pi 4B\footnote{https://rpishop.cz/raspberry-pi-4/1599-raspberry-pi-4-model-b-2gb-ram-765756931175.html} je nízkonákladový a malý jednodeskový počítač s dostatečným výkonem pro multifunkční úlohy. Pro naši úlohu byl zvolen operační systém Debian Bullseye\footnote{https://wiki.debian.org/DebianBullseye} (Desktop, 64-bit). V testovací verzi a v práci byl použit model s novějším typem operační paměti LPDDR4 a 2 GB RAM. Zařízení je vybaveno čtyřjádrovým procesorem ARM Cortex-A72 s taktem 1,5 GHz. Grafika VideoCore (verze VI). Což dohromady zajišťuje dobrý výkon a vysokou rychlost počítače.
+%
+%
+%
+\section{ReSpeaker 4-Mic Array}
+Tato součástka od výrobce Seeed Studio\footnote{https://wiki.seeedstudio.com/ReSpeaker\_4\_Mic\_Array\_for\_Raspberry\_Pi/} je vybavena čtyřmi analogovými mikrofony a audio kodekem AC108 pro snímání a zpracování hlasu ve vysokém rozlišení. 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.8\textwidth]{pic/ReSpeaker4Mic.png}
+\caption{Přehled mikrofonu ReSpeaker 4-Mic Array použitého v práci \cite{Seeed}}
+\label{fig:ReSpeaker4Mic}
+\end{figure}
+
+\noindent Zařízení je určeno k použití jako hlasové uživatelské rozhraní primárně v kombinaci s Raspberry Pi. Tato verze mikrofonu je navíc vybavena LED kroužkem s 12 programovatelnými LED diodami APA102. Díky těmto čtyřem mikrofonům a LED kroužku má ReSpeaker 4-Mic Array schopnost detekovat a indikovat hlasovou aktivitu (VAD - Voice Activity Detection), odhadovat směr zvuku (DOA - Direction Of Arrival) a provádět detekci klíčových slov (KWS - Keyword Spotting) široce používaných v aplikacích hlasové interakce.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=.65\textwidth]{pic/MicOnRasp.png}
+\caption{ReSpeaker 4-Mic Array mikrofon propojený s Raspberry Pi 4B \cite{Seeed}}
+\label{fig:MicOnRasp}
+\end{figure}
+
+\begin{important}
+\begin{itemize} \itemsep 0em
+    \item \textit{Voice Activity Detection (VAD)} -- detekce přítomnosti nebo nepřítomnosti lidské řeči ve vstupním akustickém signálu. \label{itm:VAD}
+    \item \textit{Direction Of Arrival (DOA)} -- směr, ze kterého se obvykle šíří zvukové vlny. \label{itm:DOA}
+    \item \textit{Keyword Spotting (KWS)} -- proces rozpoznávání předem definovaných slov z řečového signálu. \label{itm:KWS}
+\end{itemize}
+\end{important}
+
+%
+%
+%
+\section{Krokový motor}
+Pro zajištění rotačního pohybu robota byl vybrán krokový motor od výrobce NEMA17\footnote{https://novo3d.in/product/nema17-stepper/} (konkrétně model 42HD6021-03). Tento malý dvoufázový krokový motor má na svůj rozměr (47 mm) dostatečně velký statický moment (500 mN.m) a vysokou přesnost - 200 kroků na otáčku, což je 1,8 stupně. Motor se jednoduše instaluje a demontuje bez použití speciálních nářadí. Často se používá pro 3D tiskárny. V bakalářské práci byl použit k rotaci horní části cílového zařízení.
+%
+%
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.48\textwidth]{pic/Nema17.png}
+\caption{Krokový motor NEMA17 \cite{Nema}}
+\label{fig:NEMA17}
+\end{figure}
+
+\section{Světelný senzor}
+Pro určení místa s nejvyšším dopadem slunečního světla v práci byly použity čtyři světelné senzory TSL2591\footnote{https://rpishop.cz/adafruit/269-svetelny-senzor-tsl2591.html} od výrobce Adafruit. Světelný senzor TSL2591 má vysoký dynamický rozsah (600M:1) a velkou citlivost s účinným maximem do 88.000 Lx. Obsahuje infračervené a celospektrální diody, díky čemu umožňuje měřit odděleně různé typy světla. Sensor lze snadno spojit s počítačem Raspberry Pi pres I2C rozhraní.
+
+\newpage
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.54\textwidth]{pic/TSL.png}
+\caption{Světelný senzor TSL2591 \cite{TSL}}
+\label{fig:TSL2591}
+\end{figure}
+
+%
+%
+%
+\section{Solární panel}
+Polykrystalický solární panel ve velikosti 110 x 60 x 2,5 mm\footnote{https://dratek.cz/arduino/1589-solarni-panel-6v-1w-az-200ma.html}. S výstupním napětím 6 V a s výstupním proudem do 200 mA. Solární panel byl použit k zajištění dodatečného nabíjení cílového zařízení.
+% _____________________________________________________________________________
+%
+%
+%        CHAPTER
+%
+% _____________________________________________________________________________
+%
+\chapter{Technologie}
+V této části budou podrobně popsány technologie a způsoby jejich aplikace, použité v bakalářské práci. Technologie byly zvoleny na základě poměru jejich snadné integrace a efektivity jejich použití. Některé z technologií byly otestovány a dále využity prostřednictvím realizovaných demo verzí, některé z nich posloužily jako podklad pro vypracování této práce. Základní technologie a nástroje:
+\begin{enumerate}
+    \item ODAS (Open embeddeD Audition System)
+    \item Platforma Picovoice 
+    \item Porcupine
+    \item ROS (Robot Operating System)
+    \item Tkinter
+\end{enumerate}
+Vše bylo implementováno v programovacím jazyce Python, byl použit operační systém Debian. Pro testování a modelování byl použit také operační systém Windows.
+
+\section{Framework ODAS}
+Open embeddeD Audition System (ODAS) je open source knihovna určená k lokalizaci, sledování, separaci a následnému filtrování zdrojů zvuku. ODAS je framework vyvinutý pro použití na nízkonákladovém a nízkoúčinném vestavěném hardwaru. Je napsaný výhradně v programovacím jazyce C, díky čemu má lepší optimalizaci a je lépe přenositelný na různá vývojová prostředí \cite{Grondin}. Maximální přenositelnost frameworku je dosažena tím, že má jenom jednu externí závislost na známé knihovně třetí strany FFTW3, která se používá k efektivnímu výpočtu rychlých Fourierových transformací \cite{Grondin2}. V rámcích práce ODAS byl použit k lokalizaci zdroje zvuku a jeho postfiltraci. 
+
+
+\newpage
+\noindent 
+Na obr. \ref{fig:ODAS_scheme} je znázorněn zvukový kanál pro zpracování zvuku a  vstupně-výstupní rozhraní, z nichž každé běží v samostatném vlákně, aby bylo možné plně využít možností vícejádrových procesorů. Zdrojový zvuk může být reprezentován předem nahraným vícekanálovým audio souborem RAW nebo může být získán přímo z připojeného mikrofonu pro zpracování v reálném čase. Modul lokalizace zdroje zvuku (SSL - Sound Source Localization) generuje pevný počet potenciálních zdrojů zvuku, které se předávají modulu sledování zdroje zvuku (SST - Sound Source Tracking). Modul SST identifikuje sledované zdroje a přenáší tyto DOA (Direction Of Arrival - směr zvukové vlny) do modulu provádějícího separaci zdrojů zvuku (SSS - Sound Source Separation) k provedení formování paprsku pro každý cílový zdroj zvuku. Uživatel může rovnou definovat cílové DOA, pokud je směr zdroje zvuku předem známý a není vyžadována lokalizace ani sledování. Vygenerované segmenty lze zapsat do audio souborů RAW nebo také odeslat prostřednictvím socketu \cite{Grondin2}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{pic/ODAS_scheme.png}
+\caption{ODAS schéma zpracování příchozího zvuku \cite{Grondin2}}
+\label{fig:ODAS_scheme}
+\end{figure}
+
+
+\begin{important}
+\begin{itemize} \itemsep 0em
+    \item \textit{Sound Source Localization (SSL)} -- schopnost určit polohu nebo zdroj detekovaného zvuku podle směru a vzdálenosti. \label{itm:SSL}
+    \item \textit{Sound Source Tracking (SST)} -- schopnost sledovat měnící se zdroj zvuku v reálném čase. \label{itm:SST}
+    \item \textit{Sound Source Separation (SSS)} -- schopnost oddělit aktivní řeč nebo určitý signál od šumu na pozadí nebo ticha. \label{itm:SSS}
+\end{itemize}
+\end{important}
+
+\subsection{Lokalizace zdroje zvuku}
+Lokalizace zvuku ve frameworku se opírá o metodu Generalized Cross-Correlation with Phase Transform (GCC-PHAT), která se vypočítá pro každý pár mikrofonů. ODAS používá Inverse Fast Fourier Transform (IFFT) algoritmus k efektivnímu výpočtu křížové korelace ze signálů ve frekvenční oblasti. Při práci s malými nebo krátkými poli signálů, ODAS může také interpolovat křížovou korelaci, aby se zlepšila přesnost lokalizace a eliminoval artefakt diskretizace TDOA, který vzniká při Fourierově transformaci. Hlavním principem výpočtu DOA je metoda Steered-Response Power with Phase Transform (SRP-PHAT). Pro každý DOA framework vypočítá SRP-PHAT součtem hodnoty křížové korelace spojené s odpovídajícím časovým rozdílem (TDOA), získaným pomocí GCC-PHAT pro každý pár mikrofonů a vrátí hodnotu DOA s nejvyšším výkonem. 
+
+\section{Platforma Picovoice} \label{sec:Picovoice}
+Pro přesné zpracování zvukových dat a zároveň pro rychlé, ale efektivní trénování zvukových konceptů byla zvolená platforma Picovoice\footnote{https://picovoice.ai/docs/}. Picovoice je multiplatformní vývojářský software určený k vytváření hlasových produktů. Ve srovnání s populárními produkty pro rozpoznávání a zpracování řeči od velkých společností (např. Google, Amazon), které k analýze a práci s hlasem využívají Cloud, Picovoice se zaměřuje výhradně na on-device procesy \cite{Picovoice}. Tato metoda umožňuje dosáhnout přesnějších výsledků a pracovat bez připojení k internetu. Platforma Picovoice má webový systém Picovoice Console, pomocí kterého je možné rychle natrénovat a otestovat hlasové koncepty, pro jejich další využití v KWS (Keyword Spotting - detekce klíčového slova), VAD (Voice Activity Detection - detekce hlasu) a dalších systémech.
+
+
+\subsection{Porcupine}
+Porcupine\footnote{https://picovoice.ai/platform/porcupine/} je vysoce přesný a procesově nenáročný nástroj pro detekci klíčových slov, který rozpoznává jedinečné signály pro přechod softwaru z pasivního stavu na aktivní. Porcupine je jeden z nástrojů platformy Picovoice, který umožňuje vytvářet aplikace s možností neustálého poslechu hlasových signálů. Jedním z cílů bakalářské práce bylo zprovoznění potřebných technologií na low-cost zařízení, což Porcupine umožňuje díky své procesní nenáročnosti (viz Obrázek \ref{fig:Porcupine-efficiency}) a tomu, že je multiplatformní. Základní překážkou implementace mechanismů typu KWS je jejich závislost na masivním sběru dat pro trénování každého nového modelu. 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.74\textwidth]{pic/Porcupine-efficiency.pdf}
+\caption{Využití CPU (single-core) Porcupine ve srovnání s jinými populárními nástroji \cite{snowboy,pocketsphinx} pro detekci klíčového slova \cite{PorcupineFoto}}
+\label{fig:Porcupine-efficiency}
+\end{figure}
+Tento nástroj společně s Picovoice má webové rozhraní, kde je možné snadno a rychle natrénovat a otestovat vlastní klíčové slovo a z toho vytvořit vlastní model pro použití v dalším rozpoznávání. Takovým způsobem Porcupine eliminuje potřebu sběru dat pro každý nový model. Dalším důvodem pro výběr tohoto nástroje je jeho přesnost. Obrázek \ref{fig:Porcupine-accuracy} zobrazuje přesnost nástrojů, když frekvence falešných poplachů je jednou za 10 hodin s šumem (10 dB SNR) a řečí na pozadí \cite{PorcupineFoto}:
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.74\textwidth]{pic/Porcupine-accuracy.pdf}
+\caption{Porovnání přesnosti detekce klíčového slova Porcupine s jinými nástroji  \cite{snowboy,pocketsphinx,PorcupineFoto}}
+\label{fig:Porcupine-accuracy}
+\end{figure}
+
+\begin{important}
+\begin{itemize}
+    \item \textit{Keyword (Wake-Word, Hot-Word, Keyphrase atd.)} -- specifické slovo nebo fráze, která po vyslovení může aktivovat neaktivní zařízení, například: "Hey Siri", "OK Google" a tak dále.
+\end{itemize}
+\end{important}
+
+\section{Framework ROS}
+Robot Operating System\footnote{https://www.ros.org/} (ROS) je open source framework spravovaný společností Open Robotics se sadou softwarových knihoven a nástrojů pro vytváření robotických aplikací. ROS poskytuje hardwarovou abstrakci, nízkoúrovňové ovládání zařízení, předávání zpráv mezi procesy, nabízí ovladače zařízení, knihovny, vizualizéry, správu balíčků a další funkce. Tento framework implementuje několik různých stylů komunikace, včetně RPC synchronní komunikace realizovatelnou přes služby (Services), asynchronního streamování dat přes témata (Topics) a ukládání dat na serveru (Parameter Server) používaného uzly (Nodes) za procesním běhu \cite{ROS}. Mezi základní prvky ROS architektury patří:
+\begin{itemize}
+    \item \textit{Package (Balík)} -- hlavní jednotka pro organizaci softwaru v ROS. Slouží jako strukturovaný kontejner pro organizaci a správu softwarových komponent nezbytných pro efektivní strukturování, sdílení kódu, dat a zdrojů v rámci ekosystému ROS \cite{ROSConcepts}.
+    \item \textit{Node (Uzel)} -- nezávislý modul, který v softwarové architektuře zařízení vykonává určitou funkci nebo úkol. Tyto moduly mohou vzájemně komunikovat, aby dosáhly celkové funkcionality. ROS systém se obvykle skládá z velkého množství uzlů \cite{ROSConcepts}.
+    \item \textit{Message (Zpráva)} --  jednoduchá datová struktura sestávající z typizovaných polí obsahujících standardní primitivní typy (integer, float, boolean, atd.). Uzly komunikují mezi sebou pomocí zpráv \cite{ROSConcepts}.
+    \item \textit{Topic (Téma)} -- speciální kanál, prostřednictvím čehož uzly mohou publikovat a přijímat zprávy. Je to prostředek pro výměnu dat mezi uzly, který jim umožňuje vzájemnou interakci a spolupráci v ROS systému \cite{ROSConcepts}.
+    \item \textit{Services (Služby)} -- speciální typ komunikace využívající témata, který umožňuje uzlům provádět vzdálené operace a požadavky. Služby jsou založeny na modelu požadavek-odpověď. Jeden uzel odešle požadavek (request) na provedení určité operace a jiný uzel tento požadavek splní a odešle zpět odpověď (reply) \cite{ROSConcepts}.
+    \item \textit{Actions (Akce)} -- komunikační model pro provedení dlouhotrvajících vzdálených příkazů a požadavků, má podobný typ komunikace jako model \textit{Services}. Tento typ komunikace umožňuje sledovat průběh požadavků, získat konečný výsledek a v případě potřeby požadavek zrušit před jeho dokončením. Pro tyto všechny účely slouží balíček \textit{actionlib} \cite{ROSActions}.
+\end{itemize}
+
+\noindent Lze také zdůraznit hlavní cíle a úspěchy ROS, které jsou popsány na oficiálních webových stránkách \cite{ROS}, jmenovitě:
+\begin{itemize}
+    \item \textit{Jazyková nezávislost}: framework ROS lze snadno implementovat do jakéhokoli moderního programovacího jazyka, například: Python, C++, Java atd.
+    \item \textit{Snadné testování}: ROS má vestavěný framework pro jednotkové/integrační testování s názvem \textit{rostest}, který usnadňuje vytváření a odstraňování testovacích přípravků.
+    \item \textit{Škálování}: ROS je vhodný pro velké běhové systémy a pro velké vývojové procesy.
+\end{itemize}
+
+\section{Tkinter}
+V určitých situacích může být velmi obtížné stanovit správnost výpočtů nebo popsat princip fungování zařízení pomocí pouze čistých dat. Aby bylo snazší identifikovat chyby nebo vysvětlit některé z jevů, se vytváří vizuální model, kopírující skutečné chování určitého zařízení. Pro tyto účely v bakalářské práci byl zvolen Tkinter\footnote{https://docs.python.org/3/library/tkinter.html} framework. Tkinter je vestavěný modul jazyka Python, který se používá k vytváření aplikací s grafickým uživatelským rozhraním (GUI). Framework je open-source vydaný pod Python licencí. Tento nástroj má jednoduchou strukturu vytváření visuálních prvků a snadno se s ním pracuje, proto Tkinter je jeden z nejčastěji používaných modulů pro vytváření GUI aplikací v Pythonu. Rozhraní Tkinter frameworku je založeno na multiplatformní sadě nástrojů Tk\footnote{https://en.wikipedia.org/wiki/Tk\_(software)}, která byla původně navržen pro Tool Command Language\footnote{https://www.tcl.tk/} (Tcl) \cite{Tkinter1,Tkinter2}.
+
+\begin{important}
+\begin{itemize}
+    \item \textit{Graphical User Interface (GUI)} -- forma uživatelského rozhraní, která umožňuje uživatelům komunikovat s počítačem prostřednictvím vizuálních ukazatelů (ikony, okna, tlačítka atd.).
+\end{itemize}
+\end{important}
+
+\noindent Widgety jsou hlavními prvky GUI aplikace ve frameworku. Pomocí widgetů, které jsou součástí sady nástrojů Tk, Tkinter poskytuje uživatelům jednoduchý způsob vytváření elementů grafického uživatelského rozhraní. V aplikaci lze widgety Tk použít ke konstrukci tlačítek, textových boxů, datových polí atd. Po vytvoření tyto prvky lze propojit nebo interagovat s funkcemi, metodami, datovými proměnami nebo dokonce s jinými widgety \cite{Tkinter1,Tkinter2}.
+
+% _____________________________________________________________________________
+%
+%
+%        CHAPTER
+%
+% _____________________________________________________________________________
+%
+\chapter{Vlastní metody a jejich aplikace}
+
+\section{Robotická entita}
+
+\section{Detekce směru a polohy řečníka v prostoru}
+
+\section{Grafická vizualizace a modelování chování cílového zařízení}
+
+\section{Implementace technologie KWS}
+
+
+
+% _____________________________________________________________________________
+%
+%
+%        CHAPTER
+%
+% _____________________________________________________________________________
+%
+
+% _____________________________________________________________________________
+%
+%
+%        APPENDICES
+%
+% _____________________________________________________________________________
+%
+\appendix
+% _____________________________________________________________________________
+%
+%
+%		APPENDIX CHAPTER
+%
+% _____________________________________________________________________________
+%
+\chapter{Lokální instalace fontu GT America}\label{app:installgta}
+Třída dokumentu \filename"fasthesis.cls" používá font \term{GT America} navržený nezávislou švýcarskou písmolijnou \term{Grilli Type}. Tento font je v \emph{Manuálu jednotného vizuálního stylu Západočeské univerzity v Plzni} určen jako jeden ze dvou základních fontů, které vizuální identitu ZČU definují. Font ovšem není součástí instalace \LaTeX{}u a ani pro něj neexistuje \TeX{}ový balíček. Je to proto, že \term{GT America} není volně dostupný -- je třeba k němu mít licenci (kterou ZČU pochopitelně zakoupila, aby mohla font legálně používat).
+
+Font se tedy musí doinstalovat, aby bylo možné třídu \filename"fasthesis.cls" úspěšně využít k sazbě dokumentu. Není třeba se toho bát -- \TeX{} se chová velmi \uv{rozumně}, jen je nutné mu pár věcí vysvětlit. Postupujte podle níže uvedeného návodu:
+\begin{enumerate}
+\item V instalačním archivu \filename"fasthesis.zip" je podsložka \filename"install" a v ní pak podsložka
+\filename"$TEXMFLOCAL".
+Obsah této podsložky (jsou tam dvě složky \filename"fonts" a \filename"tex") je třeba nakopírovat do kořenové složky lokální instalace \TeX{}u (to bývá např. v operačním systému \term{Windows} v případě distribuce MiK\TeX{}u složka \filename"C:\Program Files\MiKTeX").
+\item Potom je třeba upravit tzv. \term{mapu fontů}. To se udělá příkazem ``\verb"initexmf --edit-config-file updmap"'' v konzoli. Je-li \TeX{} nainstalován správně, spustí se po zadání tohoto příkazu předvolený systémový textový editor (v nejhorším případě \term{Notepad}) a v něm se otevře soubor \filename"updmap.cfg" -- tedy konfigurační soubor globální mapy \TeX{}ových fontů. Do tohoto konfiguračního souboru (na konec) musíme připsat řádek ``\verb"Map GTAmerica"''.
+\item Po úpravě konfigurace mapy fontů je nutné celou mapu přegenerovat příkazem ``\verb"initexmf --mkmaps"''.
+\item Pro jistotu ještě spustíme program \filename"updmap", který obnoví (přegeneruje) globální mapu fontů, příkazem ``\verb"updmap --verbose"''.
+\end{enumerate}
+% _____________________________________________________________________________
+%
+%
+%		APPENDIX CHAPTER
+%
+% _____________________________________________________________________________
+%
+\chapter{Přehled balíčků importovaných třídou {\ttzfamily fasthesis}}
+Třída dokumentu \filename{fasthesis} využívá (a tedy během své instanciace úvodním příkazem dokumentu \verb"\documentclass["\textsl{\dots}\verb"]{fasthesis}" zavádí) níže popsané \LaTeX{}ové balíčky:
+\begin{enumerate}
+\item\textttz{memoir} -- třída dokumentu, od které je třída naší šablony \filename{fasthesis} odvozena. Jedná se o velmi \uv{mocnou} třídu, která nahrazuje starší třídy \LaTeX{}u 2.09$\mathrm{\epsilon}$ \textttz{article}/\textttz{report}/\textttz{book}.
+\item\textttz{inputenc} -- zajišťuje správnou interpretaci znaků z rozšířených znakových sad (CP-1250, UTF-8 atp.) ve zdrojovém kódu dokumentu \LaTeX{}em.
+\item\textttz{fontenc} -- zajišťuje správné mapování znaků ve zdrojovém kódu dokumentu na \emph{typy} (\emph{písmové znaky}) použitého fontu.
+\item\textttz{newtx} -- balíček, umožňující \LaTeX{}u využívat fonty z projektu \emph{TX Fonts}, tedy volně dostupné virtuální fontu odvozené od fontu \emph{Adobe Times} a upravené pro \LaTeX{}.
+\item\textttz{newtxtt} -- viz předchozí, varianta pro strojopis ({\itshape{\bfseries t}ele{\bfseries t}ype}).
+\item\textttz{newtxmath} -- viz předchozí, varianta pro sazbu matematických symbolů.
+\item\textttz{microtype} -- balíček tzv. \emph{mikrotypografických} rozšíření, jejichž aplikaci v dokumentu umožnilo široké rozšíření pdf\LaTeX{}u. Dovoluje dokonale \uv{vyladit} sazbu použitým fontem např. adaptivním prostrkáním, rozpalem apod.
+
+\item\textttz{babel} -- rozsáhlý balíček podpory cizích jazyků (tedy např. češtiny, která je normálně \LaTeX{}u dost cizí).
+\item\textttz{csquotes} -- korektivní balíček zajišťující správnou sazbu českých uvozovek, tedy těch, jejichž uvozující znak leží na účaří a ukončující na horní dotažnici: \uv{\dots}.
+\item\textttz{biblatex} -- balíček pro sazbu bibliografických informací na konci dokumentu a správu citací v textu.
+
+\item\textttz{graphicx} -- rozsáhlý a velmi \uv{mocný} balíček pro vkládání grafických objektů do dokumentu a manipulaci s nimi.
+\item\textttz{xcolor} -- balíček pro práci s barvami; umožňuje jednak barvy definovat v několika různých barevných prostorech a následně jimi obarvovat jednotlivé komponenty sazby (text, pozadí aj.).
+\item\textttz{eso-pic} -- balíček, který dovoluje vkládat grafické motivy na pozadí stránek.
+\item\textttz{tcolorbox} -- balíček, jehož pomocí lze obarvovat tzv. \emph{boxy}, tedy sesazené (ohraničené nebo neohraničené) pravoúhlé oblasti naplněné textem.
+
+\item\textttz{geometry} -- balíček, který se mění resp. upravuje či přizpůsobuje geometrie stránky a tzv. \emph{sazebné zrcadlo}, tedy např. vzdálenosti textu od okrajů, velikosti záhlaví a zápatí apod.
+
+\item\textttz{tikz} -- mohutný balík pro tvorbu a následnou sazbu vektorových ilustrací; pomocí speciálního jazyka na základě geometrických primitiv dovoluje popsat vzhled grafického motivu a ten posléze vložit do dokumentu.
+
+\item\textttz{hyperref} -- balíček, kterým se realizuje sazba aktivních hypertextových odkazů a také specifické typografické provedení jejich URL adres.
+
+\item\textttz{titlesec} -- balíček, s jehož pomocí lze upravit grafické provedení nadpisů jednotlivých částí dokumentu (kapitol, sekcí, podsekcí atp.).
+
+\item\textttz{listings} -- balíček s nástroji pro sazbu výpisů zdrojového kódu v mnoha různých programovacích jazycích, zvýrazňování syntaxe těchto jazyků apod.
+
+\item\textttz{xparse} -- balíček se sadou maker pro syntaktickou analýzu zdrojového kódu v jazyce \TeX{}u; třída \filename{fasthesis} ho používá k realizaci některých maker, jejichž parametrem může být řetězec, obsahující znaky se speciálním významem, které by \TeX{} za normálních okolností nějak interpretoval (jako třeba zpětné lomítko).
+\item\textttz{xstring} -- balíček, pomocí kterého lze manipulovat s řetězci (obsahem proměnných, těly maker apod.). Lze např. (i) zjišťovat, zda řetězec začíná nebo končí nějakým znakem, (ii) zkoumat, zda řetězec obsahuje nějaký podřetězec atp.
+\item\textttz{booktabs} -- balíček, dovolující sázet komplikovanější a sofistikovanější tabulky, lépe a snáze než to lze standardními prostředky \LaTeX{}u.
+\item\textttz{longtable} -- viz předchozí, dovoluje tabulku rozdělit na více stránek.
+\end{enumerate}
+Detailní informace ke všem balíčkům lze načerpat z jejich (obvykle velmi podrobných) dokumentací, které se všechny nachází v archivu zvaném \emph{CTAN}, tedy \emph{Comprehensive \TeX{} Archive Network}, na adrese URL \url{https://www.ctan.org}.
+% _____________________________________________________________________________
+%
+%
+%        BACK MATTER (BIBLIOGRAPHY, LISTS, ...)
+%
+% _____________________________________________________________________________
+%
+\\
+\\Tady jsou testovaci citace:
+\\
+\\ \cite{Hahmann}
+\\ \cite{Grondin}
+\\ \cite{Grondin2}
+\\ \cite{MARKOVIC}
+\\ \cite{Valin}
+\\ \cite{Jia}
+\\ \cite{Sun}
+\\ \cite{Dehghan}
+\\ \cite{Chung}
+\\ \cite{Parsayan}
+\\ \cite{Sun2}
+\\ \cite{Hao}
+\\ \cite{Seeed}
+\\ \cite{TSL}
+
+
+\backmatter
+\printbibliography
+\listoffigures
+\listoftables
+\listoflistings
+% _____________________________________________________________________________
+%
+%		BACK COVER
+% _____________________________________________________________________________
+%
+\setbackpagesign{img/qr-code}
+\backpage
+\end{document}
