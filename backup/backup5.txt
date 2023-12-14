@@ -1,0 +1,545 @@
+% *****************************************************************************
+%
+%        FASThesis Manual
+%        (FASThesis Class File Documentation)
+%
+%        Faculty of Applied Sciences
+%        University of West Bohemia
+%
+%        Manual & Explanatory Document
+%        Copyright (c) 2022-2023 Kamil Ekštein, Dept. of Computer Science
+%        and Engineering, Faculty of Applied Sciences, UWB
+%
+%        Version:  0.7
+%		 Encoding: UTF-8
+%		 TeXer:    pdflatex
+%
+%        Last modification on 28-Feb-2023 by KE
+%
+% *****************************************************************************
+
+% _____________________________________________________________________________
+%
+%
+%	     DOCUMENT HEADER
+%
+% _____________________________________________________________________________
+%
+\documentclass[czech, ba, kky, he, iso690numb]{fasthesis}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.fig,.eps}
+\title{Multimodální rotace robota s detekcí klíčového slova}
+\author{Yauheni}{Varabyou}{}{}
+\supervisor{Ing. Martin Bulín, M.Sc.}
+%\supervisor{Ing. Tomáš Marný}
+\assignment{zadani.pdf}
+\signdate{22}{01}{2024}{V Plzni}% << the longest local name in the Czech Rep.
+
+\addbibresource{manual.bib}% << the file with the bibliographical database to be used throughout the text
+% _____________________________________________________________________________
+%
+%
+%	     DOCUMENT FRONTMATTER TEXTS
+%
+% _____________________________________________________________________________
+%
+\abstract{Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. }
+% *** English abstract ***
+{Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. }
+\keywords{Python, RL, Respeaker}
+% _____________________________________________________________________________
+%
+%        ACKNOWLEDGEMENT
+% _____________________________________________________________________________
+%
+\acknowledgement{Na tomto místě bych rád poděkoval svému předchůdci v roli \uv{local wizarda}, člověku,
+který připravil první prakticky použitelnou \LaTeX{}ovou šablonu kvalifikační práce na Katedře informatiky
+a výpočetní techniky Fakulty aplikovaných věd Západočeské univerzity v Plzni, panu Ing. Petru Lobazovi, Ph.D. Asi ještě větší a sr\-deč\-něj\-ší po\-dě\-ko\-vá\-ní si zaslouží úžasný člověk, který mě s \TeX{}em před téměř třiceti lety seznámil: pan Doc. RNDr. František Ježek, CSc.
+
+Rád bych na tomto místě poděkoval i dalšímu matematikovi, Ing. Janu Pospíšilovi, Ph.D., který mne neúnavně přesvědčoval, že FAV novou šablonu kvalifikačních prací potřebuje jako sůl a následně mě nutil na ní pracovat (a samozřejmě přispěl řadou podnětných připomínek).
+
+Nemenší díky si zaslouží mí drazí kolegové z Katedry informatiky a výpočetní techniky, kteří svojí konstruktivní
+kritikou významně přispěli ke konečné podobě šablony -- jmenovitě jsou to (v abecedním pořadí):
+Doc. Ing. Přemysl Brada, M.Sc., Ph.D.,
+Doc. Ing. Pavel Herout, Ph.D.,
+Ing. František Pártl a
+Ing. Petr Vaněček, Ph.D.
+
+V neposlední řadě si poděkování zaslouží také studenti, kteří nově vzniklou šablonu testovali: Bc. Veronika Báčová a Petra Ocelíková.}
+% _____________________________________________________________________________
+%
+%
+%	     DOCUMENT TEXT BEGINNING
+%
+% _____________________________________________________________________________
+%
+\begin{document}
+\frontpages[tm] % or notm if the `trademark' declaration is not needed
+\tableofcontents
+% 
+% -x---- ADDITIONAL COLOUR DEFINITIONS ----------------------------------------
+%
+\makeatletter%
+\ifx\FASThesis@style\c@fullcolor%
+	\definecolor{fascolor}{cmyk}{0.06, 0.27, 1.0, 0.12}%
+	\definecolor{fascolordk}{cmyk}{0.05, 0.28, 1.0, 0.24}%
+\else%
+	\definecolor{fascolor}{cmyk}{0, 0, 0, 0.6}%
+	\definecolor{fascolordk}{cmyk}{0, 0, 0, 0.75}%
+\fi%
+\makeatother%
+\lstdefinestyle{plainsrc}{
+	backgroundcolor=\color{fascolor!10},
+	basicstyle=\ttzfamily\footnotesize,
+	numberstyle=\tiny\color{fascolordk},
+	numbers=left,
+	numbersep=5pt,
+	keepspaces=true,
+	tabsize=2,
+	extendedchars=true,
+	literate={á}{{\'a}}1 {č}{{\v{c}}}1 {ď}{{\v{d}}}1 {é}{{\'e}}1 {ě}{{\v{e}}}1 {è}{{\`{e}}}1 {í}{{\'{\i}}}1 {ľ}{{\v{l}}}1 {ň}{{\v{n}}}1 {ó}{{\'o}}1 {ŕ}{{\'r}}1 {ř}{{\v{r}}}1 {š}{{\v{s}}}1 {ť}{{\v{t}}}1 {ú}{{\'u}}1 {ů}{{\r{u}}}1 {ý}{{\'y}}1 {ž}{{\v{z}}}1
+	{Á}{{\'A}}1 {Č}{{\v{C}}}1 {Ď}{{\v{D}}}1 {É}{{\'E}}1 {Ě}{{\v{E}}}1 {È}{{\`{E}}}1 {Í}{{\'I}}1 {Ľ}{{\v{L}}}1 {Ň}{{\v{N}}}1 {Ó}{{\'O}}1 {Ŕ}{{\'R}}1 {Ř}{{\v{R}}}1 {Š}{{\v{Š}}}1 {Ť}{{\v{T}}}1 {Ú}{{\'U}}1 {Ů}{{\r{U}}}1 {Ý}{{\'Y}}1 {Ž}{{\v{Z}}}1
+}
+% -x---- END OF ADDITIONAL COLOUR DEFINITIONS ---------------------------------
+
+% _____________________________________________________________________________
+%
+%
+%        CHAPTER
+%
+% _____________________________________________________________________________
+%
+\chapter{Hardware}
+\label{Hardware}
+
+Jedním z úkolů práce bylo ukázat, že je možné pomocí veřejně dostupných technologií vytvořit efektivní zařízení. Pro tento a další účely byl v práci testován a použit následující hardware:
+\begin{enumerate}
+    \item Raspberry Pi 4 model B
+    \item ReSpeaker 4-Mic Array pole čtyř mikrofonů
+    \item Krokový motor NEMA17 (47 mm) model 42HD6021-03
+    \item Světelné senzory TSL2591 v počtu 4 kusů
+    \item Solární panel
+\end{enumerate}
+%
+%
+%
+\section{Raspberry Pi 4 model B}
+Raspberry Pi 4B\footnote{https://rpishop.cz/raspberry-pi-4/1599-raspberry-pi-4-model-b-2gb-ram-765756931175.html} je nízkonákladový a malý jednodeskový počítač s dostatečným výkonem pro multifunkční úlohy. Pro naši úlohu byl zvolen operační systém Debian Bullseye\footnote{https://wiki.debian.org/DebianBullseye} (Desktop, 64-bit). V testovací verzi a v práci byl použit model s novějším typem operační paměti LPDDR4 a 2 GB RAM. Zařízení je vybaveno čtyřjádrovým procesorem ARM Cortex-A72 s taktem 1,5 GHz. Grafika VideoCore (verze VI). Což dohromady zajišťuje dobrý výkon a vysokou rychlost počítače.
+%
+%
+%
+\section{ReSpeaker 4-Mic Array} \label{sec:ReSpeaker}
+Tato součástka od výrobce Seeed Studio\footnote{https://wiki.seeedstudio.com/ReSpeaker\_4\_Mic\_Array\_for\_Raspberry\_Pi/} je vybavena čtyřmi analogovými mikrofony a audio kodekem AC108 pro snímání a zpracování hlasu ve vysokém rozlišení. 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.8\textwidth]{pic/ReSpeaker4Mic.png}
+\caption{Přehled mikrofonu ReSpeaker 4-Mic Array použitého v práci \cite{Seeed}}
+\label{fig:ReSpeaker4Mic}
+\end{figure}
+
+\noindent Zařízení je určeno k použití jako hlasové uživatelské rozhraní primárně v kombinaci s Raspberry Pi. Tato verze mikrofonu je navíc vybavena LED kroužkem s 12 programovatelnými LED diodami APA102. Díky těmto čtyřem mikrofonům a LED kroužku má ReSpeaker 4-Mic Array schopnost detekovat a indikovat hlasovou aktivitu (VAD - Voice Activity Detection), odhadovat směr zvuku (DOA - Direction Of Arrival) a provádět detekci klíčových slov (KWS - Keyword Spotting) široce používaných v aplikacích hlasové interakce.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=.65\textwidth]{pic/MicOnRasp.png}
+\caption{ReSpeaker 4-Mic Array mikrofon propojený s Raspberry Pi 4B \cite{Seeed}}
+\label{fig:MicOnRasp}
+\end{figure}
+
+\begin{important}
+\begin{itemize} \itemsep 0em
+    \item \textit{Voice Activity Detection (VAD)} -- detekce přítomnosti nebo nepřítomnosti lidské řeči ve vstupním akustickém signálu. \label{itm:VAD}
+    \item \textit{Direction Of Arrival (DOA)} -- směr, ze kterého se obvykle šíří zvukové vlny. \label{itm:DOA}
+    \item \textit{Keyword Spotting (KWS)} -- proces rozpoznávání předem definovaných slov z řečového signálu. \label{itm:KWS}
+\end{itemize}
+\end{important}
+
+%
+%
+%
+\section{Krokový motor}
+Pro zajištění rotačního pohybu robota byl vybrán krokový motor od výrobce NEMA17\footnote{https://novo3d.in/product/nema17-stepper/} (konkrétně model 42HD6021-03). Tento malý dvoufázový krokový motor má na svůj rozměr (47 mm) dostatečně velký statický moment (500 mN.m) a vysokou přesnost - 200 kroků na otáčku, což je 1,8 stupně. Motor se jednoduše instaluje a demontuje bez použití speciálních nářadí. Často se používá pro 3D tiskárny. V bakalářské práci byl použit k rotaci horní části cílového zařízení.
+%
+%
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.48\textwidth]{pic/Nema17.png}
+\caption{Krokový motor NEMA17 \cite{Nema}}
+\label{fig:NEMA17}
+\end{figure}
+
+\section{Světelný senzor}
+Pro určení místa s nejvyšším dopadem slunečního světla v práci byly použity čtyři světelné senzory TSL2591\footnote{https://rpishop.cz/adafruit/269-svetelny-senzor-tsl2591.html} od výrobce Adafruit. Světelný senzor TSL2591 má vysoký dynamický rozsah (600M:1) a velkou citlivost s účinným maximem do 88.000 Lx. Obsahuje infračervené a celospektrální diody, díky čemu umožňuje měřit odděleně různé typy světla. Sensor lze snadno spojit s počítačem Raspberry Pi pres I2C rozhraní.
+
+\newpage
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.54\textwidth]{pic/TSL.png}
+\caption{Světelný senzor TSL2591 \cite{TSL}}
+\label{fig:TSL2591}
+\end{figure}
+
+%
+%
+%
+\section{Solární panel}
+Polykrystalický solární panel ve velikosti 110 x 60 x 2,5 mm\footnote{https://dratek.cz/arduino/1589-solarni-panel-6v-1w-az-200ma.html}. S výstupním napětím 6 V a s výstupním proudem do 200 mA. Solární panel byl použit k zajištění dodatečného nabíjení cílového zařízení.
+% _____________________________________________________________________________
+%
+%
+%        CHAPTER
+%
+% _____________________________________________________________________________
+%
+\chapter{Technologie} \label{Technologie}
+V této části budou podrobně popsány technologie a způsoby jejich aplikace, použité v bakalářské práci. Technologie byly zvoleny na základě poměru jejich snadné integrace a efektivity jejich použití. Některé z technologií byly otestovány a dále využity prostřednictvím realizovaných demo verzí, některé z nich posloužily jako podklad pro vypracování této práce. Základní technologie a nástroje:
+\begin{enumerate}
+    \item ODAS (Open embeddeD Audition System)
+    \item Platforma Picovoice 
+    \item Porcupine
+    \item ROS (Robot Operating System)
+    \item Tkinter
+\end{enumerate}
+Vše bylo implementováno v programovacím jazyce Python, byl použit operační systém Debian. Pro testování a modelování byl použit také operační systém Windows.
+
+\section{Framework ODAS}
+Open embeddeD Audition System (ODAS) je open source knihovna určená k lokalizaci, sledování, separaci a následnému filtrování zdrojů zvuku. ODAS je framework vyvinutý pro použití na nízkonákladovém a nízkoúčinném vestavěném hardwaru. Je napsaný výhradně v programovacím jazyce C, díky čemu má lepší optimalizaci a je lépe přenositelný na různá vývojová prostředí \cite{Grondin}. Maximální přenositelnost frameworku je dosažena tím, že má jenom jednu externí závislost na známé knihovně třetí strany FFTW3, která se používá k efektivnímu výpočtu rychlých Fourierových transformací \cite{Grondin2}. V rámcích práce ODAS byl použit k lokalizaci zdroje zvuku a jeho postfiltraci. 
+
+
+\newpage
+\noindent 
+Na obr. \ref{fig:ODAS_scheme} je znázorněn zvukový kanál pro zpracování zvuku a  vstupně-výstupní rozhraní, z nichž každé běží v samostatném vlákně, aby bylo možné plně využít možností vícejádrových procesorů. Zdrojový zvuk může být reprezentován předem nahraným vícekanálovým audio souborem RAW nebo může být získán přímo z připojeného mikrofonu pro zpracování v reálném čase. Modul lokalizace zdroje zvuku (SSL - Sound Source Localization) generuje pevný počet potenciálních zdrojů zvuku, které se předávají modulu sledování zdroje zvuku (SST - Sound Source Tracking). Modul SST identifikuje sledované zdroje a přenáší tyto DOA (Direction Of Arrival - směr zvukové vlny) do modulu provádějícího separaci zdrojů zvuku (SSS - Sound Source Separation) k provedení formování paprsku pro každý cílový zdroj zvuku. Uživatel může rovnou definovat cílové DOA, pokud je směr zdroje zvuku předem známý a není vyžadována lokalizace ani sledování. Vygenerované segmenty lze zapsat do audio souborů RAW nebo také odeslat prostřednictvím socketu \cite{Grondin2}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{pic/ODAS_scheme.png}
+\caption{ODAS schéma zpracování příchozího zvuku \cite{Grondin2}}
+\label{fig:ODAS_scheme}
+\end{figure}
+
+
+\begin{important}
+\begin{itemize} \itemsep 0em
+    \item \textit{Sound Source Localization (SSL)} -- schopnost určit polohu nebo zdroj detekovaného zvuku podle směru a vzdálenosti. \label{itm:SSL}
+    \item \textit{Sound Source Tracking (SST)} -- schopnost sledovat měnící se zdroj zvuku v reálném čase. \label{itm:SST}
+    \item \textit{Sound Source Separation (SSS)} -- schopnost oddělit aktivní řeč nebo určitý signál od šumu na pozadí nebo ticha. \label{itm:SSS}
+\end{itemize}
+\end{important}
+
+\subsection{Lokalizace zdroje zvuku}
+Lokalizace zvuku ve frameworku se opírá o metodu Generalized Cross-Correlation with Phase Transform (GCC-PHAT), která se vypočítá pro každý pár mikrofonů. ODAS používá Inverse Fast Fourier Transform (IFFT) algoritmus k efektivnímu výpočtu křížové korelace ze signálů ve frekvenční oblasti. Při práci s malými nebo krátkými poli signálů, ODAS může také interpolovat křížovou korelaci, aby se zlepšila přesnost lokalizace a eliminoval artefakt diskretizace TDOA, který vzniká při Fourierově transformaci. Hlavním principem výpočtu DOA je metoda Steered-Response Power with Phase Transform (SRP-PHAT). Pro každý DOA framework vypočítá SRP-PHAT součtem hodnoty křížové korelace spojené s odpovídajícím časovým rozdílem (TDOA), získaným pomocí GCC-PHAT pro každý pár mikrofonů a vrátí hodnotu DOA s nejvyšším výkonem. 
+
+\section{Platforma Picovoice} \label{sec:Picovoice}
+Pro přesné zpracování zvukových dat a zároveň pro rychlé, ale efektivní trénování zvukových konceptů byla zvolená platforma Picovoice\footnote{https://picovoice.ai/docs/}. Picovoice je multiplatformní vývojářský software určený k vytváření hlasových produktů. Ve srovnání s populárními produkty pro rozpoznávání a zpracování řeči od velkých společností (např. Google, Amazon), které k analýze a práci s hlasem využívají Cloud, Picovoice se zaměřuje výhradně na on-device procesy \cite{Picovoice}. Tato metoda umožňuje dosáhnout přesnějších výsledků a pracovat bez připojení k internetu. Platforma Picovoice má webový systém Picovoice Console, pomocí kterého je možné rychle natrénovat a otestovat hlasové koncepty, pro jejich další využití v KWS (Keyword Spotting - detekce klíčového slova), VAD (Voice Activity Detection - detekce hlasu) a dalších systémech.
+
+
+\subsection{Porcupine}
+Porcupine\footnote{https://picovoice.ai/platform/porcupine/} je vysoce přesný a procesově nenáročný nástroj pro detekci klíčových slov, který rozpoznává jedinečné signály pro přechod softwaru z pasivního stavu na aktivní. Porcupine je jeden z nástrojů platformy Picovoice, který umožňuje vytvářet aplikace s možností neustálého poslechu hlasových signálů. Jedním z cílů bakalářské práce bylo zprovoznění potřebných technologií na low-cost zařízení, což Porcupine umožňuje díky své procesní nenáročnosti (viz Obrázek \ref{fig:Porcupine-efficiency}) a tomu, že je multiplatformní. Základní překážkou implementace mechanismů typu KWS je jejich závislost na masivním sběru dat pro trénování každého nového modelu. 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.74\textwidth]{pic/Porcupine-efficiency.pdf}
+\caption{Využití CPU (single-core) Porcupine ve srovnání s jinými populárními nástroji \cite{snowboy,pocketsphinx} pro detekci klíčového slova \cite{PorcupineFoto}}
+\label{fig:Porcupine-efficiency}
+\end{figure}
+Tento nástroj společně s Picovoice má webové rozhraní, kde je možné snadno a rychle natrénovat a otestovat vlastní klíčové slovo a z toho vytvořit vlastní model pro použití v dalším rozpoznávání. Takovým způsobem Porcupine eliminuje potřebu sběru dat pro každý nový model. Dalším důvodem pro výběr tohoto nástroje je jeho přesnost. Obrázek \ref{fig:Porcupine-accuracy} zobrazuje přesnost nástrojů, když frekvence falešných poplachů je jednou za 10 hodin s šumem (10 dB SNR) a řečí na pozadí \cite{PorcupineFoto}:
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.74\textwidth]{pic/Porcupine-accuracy.pdf}
+\caption{Porovnání přesnosti detekce klíčového slova Porcupine s jinými nástroji  \cite{snowboy,pocketsphinx,PorcupineFoto}}
+\label{fig:Porcupine-accuracy}
+\end{figure}
+
+\begin{important}
+\begin{itemize}
+    \item \textit{Keyword (Wake-Word, Hot-Word, Keyphrase atd.)} -- specifické slovo nebo fráze, která po vyslovení může aktivovat neaktivní zařízení, například: "Hey Siri", "OK Google" a tak dále.
+\end{itemize}
+\end{important}
+
+\section{Framework ROS}
+Robot Operating System\footnote{https://www.ros.org/} (ROS) je open source framework spravovaný společností Open Robotics se sadou softwarových knihoven a nástrojů pro vytváření robotických aplikací. ROS poskytuje hardwarovou abstrakci, nízkoúrovňové ovládání zařízení, předávání zpráv mezi procesy, nabízí ovladače zařízení, knihovny, vizualizéry, správu balíčků a další funkce. Tento framework implementuje několik různých stylů komunikace, včetně RPC synchronní komunikace realizovatelnou přes služby (Services), asynchronního streamování dat přes témata (Topics) a ukládání dat na serveru (Parameter Server) používaného uzly (Nodes) za procesním běhu \cite{ROS}. Mezi základní prvky ROS architektury patří:
+\begin{itemize}
+    \item \textit{Package (Balík)} -- hlavní jednotka pro organizaci softwaru v ROS. Slouží jako strukturovaný kontejner pro organizaci a správu softwarových komponent nezbytných pro efektivní strukturování, sdílení kódu, dat a zdrojů v rámci ekosystému ROS \cite{ROSConcepts}.
+    \item \textit{Node (Uzel)} -- nezávislý modul, který v softwarové architektuře zařízení vykonává určitou funkci nebo úkol. Tyto moduly mohou vzájemně komunikovat, aby dosáhly celkové funkcionality. ROS systém se obvykle skládá z velkého množství uzlů \cite{ROSConcepts}.
+    \item \textit{Message (Zpráva)} --  jednoduchá datová struktura sestávající z typizovaných polí obsahujících standardní primitivní typy (integer, float, boolean, atd.). Uzly komunikují mezi sebou pomocí zpráv \cite{ROSConcepts}.
+    \item \textit{Topic (Téma)} -- speciální kanál, prostřednictvím čehož uzly mohou publikovat a přijímat zprávy. Je to prostředek pro výměnu dat mezi uzly, který jim umožňuje vzájemnou interakci a spolupráci v ROS systému \cite{ROSConcepts}.
+    \item \textit{Services (Služby)} -- speciální typ komunikace využívající témata, který umožňuje uzlům provádět vzdálené operace a požadavky. Služby jsou založeny na modelu požadavek-odpověď. Jeden uzel odešle požadavek (request) na provedení určité operace a jiný uzel tento požadavek splní a odešle zpět odpověď (reply) \cite{ROSConcepts}.
+    \item \textit{Actions (Akce)} -- komunikační model pro provedení dlouhotrvajících vzdálených příkazů a požadavků, má podobný typ komunikace jako model \textit{Services}. Tento typ komunikace umožňuje sledovat průběh požadavků, získat konečný výsledek a v případě potřeby požadavek zrušit před jeho dokončením. Pro tyto všechny účely slouží balíček \textit{actionlib} \cite{ROSActions}.
+\end{itemize}
+
+\noindent Lze také zdůraznit hlavní přednosti ROS systému, které jsou popsány na oficiálních webových stránkách \cite{ROS}, jmenovitě:
+\begin{itemize}
+    \item \textit{Jazyková nezávislost}: framework ROS lze snadno implementovat do jakéhokoli moderního programovacího jazyka, například: Python, C++, Java atd.
+    \item \textit{Snadné testování}: ROS má vestavěný framework pro jednotkové/integrační testování s názvem \textit{rostest}, který usnadňuje vytváření a odstraňování testovacích přípravků.
+    \item \textit{Škálovatelnost}: ROS je vhodný pro velké systémy a velké vývojové procesy.
+\end{itemize}
+
+\section{Tkinter} \label{sec:Tkinter}
+V určitých situacích může být velmi obtížné stanovit správnost výpočtů nebo popsat princip fungování zařízení pomocí pouze čistých dat. Aby bylo snazší identifikovat chyby nebo vysvětlit některé z jevů, vytváří se vizuální model, kopírující skutečné chování určitého zařízení. Pro tyto účely v bakalářské práci byl zvolen Tkinter\footnote{https://docs.python.org/3/library/tkinter.html} framework. Tkinter je vestavěný modul jazyka Python, který se používá k vytváření aplikací s grafickým uživatelským rozhraním (GUI). Framework je open-source vydaný pod Python licencí. Tento nástroj má jednoduchou strukturu vytváření vizuálních prvků a snadno se s ním pracuje, proto Tkinter je jeden z nejčastěji používaných modulů pro vytváření GUI aplikací v Pythonu. Rozhraní Tkinter frameworku je založeno na multiplatformní sadě nástrojů Tk\footnote{https://en.wikipedia.org/wiki/Tk\_(software)}, která byla původně navržen pro Tool Command Language\footnote{https://www.tcl.tk/} (Tcl) \cite{Tkinter1,Tkinter2}.
+
+\begin{important}
+\begin{itemize}
+    \item \textit{Graphical User Interface (GUI)} -- forma uživatelského rozhraní, která umožňuje uživatelům komunikovat s počítačem prostřednictvím vizuálních ukazatelů (ikony, okna, tlačítka atd.).
+\end{itemize}
+\end{important}
+
+\noindent Widgety jsou hlavními prvky GUI aplikace ve frameworku. Pomocí widgetů, které jsou součástí sady nástrojů Tk, Tkinter poskytuje uživatelům jednoduchý způsob vytváření elementů grafického uživatelského rozhraní. V aplikaci lze widgety Tk použít ke konstrukci tlačítek, textových boxů, datových polí atd. Po vytvoření tyto prvky lze propojit nebo interagovat s funkcemi, metodami, datovými objekty nebo dokonce s jinými widgety \cite{Tkinter1,Tkinter2}.
+
+
+\section{Reinforcement Learning} \label{sec:Tkinter}
+Učení s posilováním (Reinforcement Learning nebo RL) je oblast vědy o rozhodování, která je v principu podobná strojovému učení. Jde o učení optimálního chování v prostředí s cílem maximalizovat odměnu na základě předem stanovených pravidel. Učícímu se není řečeno, jaké akce má provádět, ale místo toho musí sám určit, které akce jsou nejvýhodnější tím, že je vyzkouší. Je třeba zmínit, že kvalita akcí se měří nejen okamžitou odměnou, kterou dostanou v daném momentě, ale také pozdější odměnou, kterou mohou získat v budoucnu. Tento proces objevování je podobný způsobu hledání metodou pokus-omyl. Tyto dvě charakteristiky, hledání metodou pokus-omyl a pozdější odměna, jsou dvěma nejdůležitějšími distinktivními znaky posilovacího učení \cite{Sutton1998}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.88\textwidth]{pic/RL.pdf}
+\caption{RL}
+\label{fig:RL}
+\end{figure}
+
+\noindent Úloha učení s posilováním zahrnuje agenta, který zkoumá neznámé prostředí, aby dosáhl cíle pomocí určitých aktivit. Agent se musí naučit vnímat stav prostředí a ovlivňovat ho pomocí svých akcí tak, aby maximalizoval svoji odměnu. Cílem algoritmu RL je najít takovou politiku akcí, která maximalizuje průměrnou hodnotu, kterou může získat z každého stavu systému. Formální struktura pro RL je převzata z problému optimálního řízení Markovových rozhodovacích procesů (MDP) \cite{Sutton1998}.
+
+\bigskip
+\noindent Hlavními prvky systému RL jsou \cite{synopsys}:
+\begin{itemize}
+    \item \textit{Agent} nebo učící se subjekt
+    \item \textit{Prostředí}, se kterým agent interaguje
+    \item \textit{Pravidla}, kterými se agent řídí při provádění akcí nebo při pozorování prostředí
+    \item \textit{Odměna}, kterou agent obdrží při provádění akcí
+\end{itemize}
+
+\noindent Učení s posilováním se od učení s učitelem liší tím, že nevyžaduje předložení označených dvojic vstupních a výstupních dat a nevyžaduje ani explicitní korekci neoptimálních akcí.  Místo toho se zaměřuje na hledání rovnováhy mezi zkoumáním prostředí a vlastním rozhodováním \cite{Sutton1998}. V případě učení s posilováním nejsou k dispozici sady trénovacích dat, posilovací agent se musí sám učit ze svých zkušeností a rozhodnout, co má udělat pro splnění daného úkolu. Díky tomu, že algoritmus nepotřebuje sady trénovacích dat, byl zvolen pro využití v bakalářské práci.
+
+\subsection{Q-learning algoritmus}
+\noindent Algoritmy RL lze obecně rozdělit na bezmodelové (model-free) a modelové (model-based) \cite{Sutton1998}. Metody založené na modelu se spoléhají především na \textit{plánování}, zatímco metody bez modelu se spoléhají především na \textit{učení}. V této práci je použit algoritmus Q-learning vycházející z bezmodelového (model-free) typu.
+
+\bigskip
+\noindent Důležité pojmy v učení pomocí Q-Learning (viz Obrázek \ref{fig:QL}) \cite{QLearning}:
+\begin{itemize}
+    \item \textit{Stav (S)}, představuje aktuální pozici agenta v prostředí
+    \item \textit{Akce (A)} je činnost, kterou agent provede, když se nachází v určitém stavu
+    \item \textit{Odměna}, za každou akci agent dostává kladnou nebo zápornou odměnu.
+    \item \textit{Epizody} je posloupnost stavů, akcí a odměn, která končí konečným stavem
+    \item \textit{Q-Value nebo Q (A, S)}, slouží k určení, jak dobrá je akce A provedená v určitém stavu S
+    \item \textit{Q-Table} je jednoduchá vyhledávací tabulka, ve které se pro každý stav počítá maximální očekávaná budoucí odměna za akci (Q-Value). Pomáhá nám najít nejlepší akci pro každý stav v prostředí
+\end{itemize}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{pic/QL.pdf}
+\caption{Q-learning}
+\label{fig:QL}
+\end{figure}
+
+\noindent Q-learning je algoritmus, který nalezne nejlepší možnou strategii vzhledem k aktuálnímu stavu agenta. V závislosti na tom, kde se agent v prostředí nachází, rozhodne o další akci, kterou je třeba provést. Obecně, cílem modelu je najít nejlepší činnost vzhledem k jeho aktuálnímu stavu. Pro získání očekávaného budoucího stavu a odměny v každém stavu se používá Bellmanova rovnice. Jakmile pomocí této rovnice získáme výsledek, uložíme jej do Q-tabulky, abychom mohli v budoucnu jednotlivé stavy vzájemně porovnávat. Rovnice je uvedena níže:
+
+\begin{equation}
+Q(S_{t}, A_{t}) \leftarrow Q(S_{t}, A_{t}) + \alpha \left[ R_{t+1} + \gamma \max_{a} Q(S_{t+1}, a) - Q(S_{t}, A_{t}) \right]
+\end{equation}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{pic/Bellman.png}
+\caption{Bellmanova rovnice \cite{QLearning}}
+\label{fig:RL}
+\end{figure}
+
+\noindent K nalezení příštího stavu našeho agenta využívá aktuální stav \textit{Q(S,A)} a odměnu \textit{R(S,A)} spojenou s tímto stavem spolu s maximální očekávanou odměnou \textit{MaxQ(S,A)} a diskontní sazbou $\gamma$, která určuje její hodnotu pro aktuální stav. Míra učení $\alpha$ určuje, jak rychle nebo pomalu se bude model učit \cite{Sutton1998, QLearning}.
+
+
+% _____________________________________________________________________________
+%
+%
+%        CHAPTER
+%
+% _____________________________________________________________________________
+%
+\chapter{Vlastní metody a jejich aplikace}
+V této části bakalářské práce budou podrobně popsány metody použité k dosažení postavených cílů, příklady vlastních nápadů a vylepšení pro jejich zefektivnění, grafická simulace pro testování a znázornění výstupů metod a jejich konečná implementace na fyzickém zařízení. 
+
+\section{Robotická entita}
+Hlavní myšlenkou práce bylo to, aby všechny použité technologie a metody byly implementovány a vyhodnoceny na cílové robotické entitě v reálných podmínkách. K tomuto účelu na katedře kybernetiky Západočeské univerzity v Plzni ve spolupráci bylo vyvinuto unikátní fyzikální zařízení s názvem \textit{Robot.v1}. 
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.6\textwidth]{pic/RobotFront.png}
+\caption{Podrobný přehled konstrukce Robot.v1 z přední strany}
+\label{fig:RobotFront}
+\end{figure}
+
+\bigskip
+\noindent \textit{Robot.v1} je multimodální nízkonákladová fyzická platforma oválného tvaru, která byla vytištěná na 3D tiskárně. Toto zařízení bylo vyvinuto s cílem poskytnout cenově dostupné řešení pro testování a aplikace ve vědeckých úlohách zaměřených na asistenci, přirozenou komunikaci či jinou aplikaci úloh strojového učení. Rozpočet na celou platformu byl stanoven na cca 10 000 korun.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{pic/RobotSide2.png}
+\caption{Přehled konstrukce Robot.v1 z boku}
+\label{fig:RobotSide}
+\end{figure}
+
+\noindent Na obrázkách \ref{fig:RobotFront} a \ref{fig:RobotSide} je znázorněna konstrukce robotické entity. Jak můžeme vidět na obrázku \ref{fig:RobotSide}, základní konstrukce robota se skládá ze statické spodní částí a horního rotačního prvku. Robot se také skládá z mnoha dalších součástí, které umožňují zařízení provádět určité činnosti. Patří k nim kamera poskytující vizuální informace, reproduktor umožňující komunikaci s uživatelem, displej pro ovládání nastavení robota, světelné senzory a solární panel pro efektivní nabíjení zařízení, krokový motor umožňující otáčení horní části a také vysoce výkonné mikrofonní pole pro vnímání a lokalizaci zdroje zvuku. Výpočetní úlohy se provádějí na počítači Raspberry Pi 4B který slouží jako základní procesorová jednotka. Softwarová implementace \textit{Robot.v1} se opírá o systém ROS (Robot Operating System), který slouží jako hlavní framework pro integraci a koordinaci jednotlivých úloh a zajišťuje stabilní zpracování.
+\bigskip
+
+\section{Detekce polohy řečníka v prostoru}
+Základní způsob přenosu zvukových signálů přijatých mikrofonem do cílového objektu, v tomto případě motoru, funguje ve vztahu 1:1 (viz Obrázek \ref{fig:BasicSource}). To znamená, že každý zvukový signál má odpovídající výstup, který nese informaci o jeho relativním směru. Tato metoda má tu nevýhodu, že v procesu lokalizace zvuku a dalšího přenosu DOA (Direction Of Arrival - směr zvukové vlny) do motoru se nepoužívá žádné zpracování nebo filtrování chybných zvukových signálů (šum, cizí zvuky atd.). To může způsobit, že tyto vstupní údaje ovlivní výsledek a počet výstupních dat, což následně způsobí, že robot bude provádět časté a zbytečné otáčky chybným směrem.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{pic/BasicSourceD.pdf}
+\caption{Princip nalezení DOA bez filtrování vstupního signálu}
+\label{fig:BasicSource}
+\end{figure}
+
+\subsection{Filtrace vstupních zvukových signálů}
+Aby se minimalizovala chyba při určování polohy zdroje zvuku, bylo rozhodnuto použít jednoduchý \textit{Buffer} (viz Obrázek \ref{fig:Buffer}), který by tento problém vyřešil. Použití \textit{Buffru} také snižuje počet výsledných DOA, které jsou pak prostřednictvím systému ROS předány robotické entitě, aby se otočila daným směrem.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=\textwidth]{pic/BufferD.pdf}
+\caption{Diagram vlivu komponenty Buffer na vstupní a výstupní data}
+\label{fig:Buffer}
+\end{figure}
+
+\noindent \textit{Buffer} funguje tak, že tato komponenta se skládá ze dvou a případně více částí (na Obrázku \ref{fig:BufferDetail} pojmenovaných \textit{B1}, \textit{B2}). Tyto buňky jsou sekvenční a každá z nich může uchovávat určitý lichý počet informací (na obr. \ref{fig:BufferDetail} jsou to maximálně tři). Předpokládejme, že \textit{S1}, \textit{S2}, \textit{S3} jsou tři různé zdroje zvuku postupně přijímané polem mikrofonů v určitém časovém intervalu. Tato data se nejprve vloží do buňky \textit{B1}, která shromažďuje informace, dokud nedosáhne své maximální kapacity. Poté detekuje signál, který je ve větším množství, a přesune jej do buňky \textit{B2} (na obr. \ref{fig:BufferDetail} signál \textit{S1}). V dalším kroku se buňka \textit{B1} zcela vyčistí a proces se opakuje, dokud se buňka \textit{B2} zcela nenaplní. Princip plnění a vymazávání buněk je pro každou součástku stejný, jen se tyto manipulace provádějí postupně od začátku ke konci. Jakmile buňka \textit{B2} dosáhne svém maximální kapacity, vybere se signál, které má v buňce největší zastoupení, což bude výsledkem \textit{Buffer} komponenty (na obr. \ref{fig:BufferDetail} signál \textit{S2}). Je třeba poznamenat, že mohou nastat situace, kdy buňky obsahují odlišné signály, které se neopakují. V takovém případě se předává poslední signál.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{pic/BufferDetail.pdf}
+\caption{Detailní přehled komponenty Buffer}
+\label{fig:BufferDetail}
+\end{figure}
+
+\noindent Tento filtrační systém lze přizpůsobit přidáním buněk a/nebo zvýšením jejich maximální kapacity.
+
+\bigskip
+\bigskip
+\subsection{Indikace směru zvuku v reálném čase}
+\bigskip
+\noindent
+K zachycení zvukových signálů a lokalizací směru zvuku, sloužilo mikrofonní pole ReSpeaker 4-mic array (kap. \ref{Hardware} sek. \ref{sec:ReSpeaker}). Toto pole čtyř mikrofonů má integrovaný LED kroužek s 12 programovatelnými LED diodami. Pomocí tohoto kroužku je možné v reálném čase ukazovat, ze kterého směru přicházejí zvukové signály. 
+
+\bigskip
+\noindent
+Omezíme se na detekci zvuku v dvourozměrném prostoru a dostaneme tak rozsah 360 stupňů pro zachycení zdroje zvuku. Protože diod je celkem 12, znamená to, že každá dioda je schopna indikovat přibližný směr v rozsahu 30 stupňů (viz Obrázek \ref{fig:MicLed}). Pro zmenšení tohoto rozsahu byl vynalezen princip s využitím přilehlých diod. Tento princip umožnil snížit rozsah relativního směru zvuku na dvojnásobek a ve výsledku činí 15 stupňů (viz Obrázek \ref{fig:MicLedNew}).
+\bigskip
+\bigskip
+\bigskip
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.7\textwidth]{pic/MicLed.pdf}
+\caption{Detailní přehled LED kroužku mikrofonního pole}
+\label{fig:MicLed}
+\end{figure}
+
+\noindent Použití nového principu pro zmenšení oblasti zachycení zvukových signálů mělo vliv na vznik jednoho dodatečného stavu (obr. \ref{fig:MicLedNew}). Stav 1 (State 1) ukazuje původní stav při použití jedné diody pouze s menším rozsahem, Stav 2 (State 2) ukazuje nový stav při použití dvou diod.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=\textwidth]{pic/MicLedNew.pdf}
+\caption{Dva stavy LED indikace směru zvuku}
+\label{fig:MicLedNew}
+\end{figure}
+
+
+
+\section{Grafická vizualizace a modelování chování cílového zařízení}
+S využitím jazyka Python a Tkinter frameworku (kap. \ref{Technologie} sek. \ref{sec:Tkinter}) byla vytvořena grafická vizualizace kopírující chování a funkce robotické entity popsané v bakalářské práci. Cílem vytvoření grafické vizualizace bylo:
+\begin{itemize}
+    \item Vizuální demonstrace chování a funkcionality robota při určitých vstupních podmínkách.
+    \item Vytvoření prostředí pro testování a realizace experimentů pomocí různých scénářů bez použití fyzického zařízení.
+    \item Vytvoření modelu, pomocí kterého by bylo možné optimalizovat funkčnost a identifikovat případné chyby ve výpočtech.
+\end{itemize}
+
+\subsection{Přehled aplikace a popis funkcionality}
+Po spuštění aplikace se zobrazí hlavní okno (Obrázek \ref{fig:App}), kde se v levém horním rohu nachází sekce s nastavením a výstupními daty, a v pravé části aplikace se nachází grafická vizualizace robota ve výchozím stavu.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=\textwidth]{pic/App.png}
+\caption{Přehled aplikace}
+\label{fig:App}
+\end{figure}
+
+\noindent Část s nastaveními a údaji lze rámcově rozdělit do čtyř sekcí (viz Obrázek \ref{fig:ParameterTabDetail}), a to na:
+\begin{itemize}
+    \item \textit{Stavová (State) sekce}, kde můžeme vybrat stav virtuálního robota a způsob zpracování vstupních dat.
+    \item \textit{Sekce parametrů (Parameters)}, kde jsou umístěna okna pro ruční zadávání dat odpovídající určitému stavu.
+    \item \textit{Sekce s výstupními daty (Output data)}, kde jsou zobrazeny údaje popisující stav robota v prostoru a odpovídající výstup.
+    \item \textit{Akční tlačítka (Action buttons)}, která slouží ke spuštění nebo aktualizaci výchozí pozice vizualizace.
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.77\textwidth]{pic/ParameterTabDetail.png}
+\caption{Detailní přehled nastavení aplikace}
+\label{fig:ParameterTabDetail}
+\end{figure}
+
+\noindent Pomocí tlačítek umístěných ve stavové části je možné měnit způsob interakce robota a způsob zpracování vstupních dat. K dispozici jsou pouze dva stavy interakce Aktivní (Active) a Nečinný (Idle), a dva procesy zpracování dat Automatický (Auto) a Ruční (Manual):
+\begin{itemize}
+    \item \textit{Aktivní (Active)} znamená, že robot je v aktivním režimu a v reálném čase snímá zvukové signály pomocí mikrofonu.
+    \item \textit{Nečinnost (Idle)} znamená, že robot je v pasivním režimu a pomocí světelných senzorů určuje pozici s nejvyšším dopadem slunečního světla, co zvyšuje efektivitu pasivního nabíjení zařízení.
+    \item \textit{Automatický (Auto) proces} znamená, že vstupní data jsou generována automaticky a náhodně v podmíněných mezích.
+    \item \textit{Ruční (Manual) proces} znamená, že je možné ručně zadat požadované parametry do příslušného pole ve stanoveném formátu.
+\end{itemize}
+
+\noindent Z toho vyplývá, že celkově existují čtyři možné kombinace (viz Obrázek \ref{fig:Tab4states}), jmenovitě:
+\begin{itemize}
+    \item Aktivní stav s automaticky generovanými daty. V tomto stavu není možné zadávat data ručně, takže sekce parametrů není k dispozici.
+    \item Aktivní stav s ručním zadáváním dat. V této situaci máme k dispozici parametry, do kterých můžeme zadat aktuální polohu kamery v prostoru v rozsahu od -180 do 180 stupňů a směr zvukového signálu přijímaného mikrofonem v rozsahu od 0 až 360 stupňů.
+    \item Nečinný stav s automaticky generovanými daty. Při tomto stavu také není možné používat parametry a jsou nedostupné.
+    \item Nečinný stav s ručním zadáváním dat. V tomto případě můžeme použít parametr a zadat řetězec se čtyřmi hodnotami ve formátu float oddělenými čárkami, které označují intenzitu světla přijatou každým světelným senzorem. V tomto pořadí: s1 (poloha -135 stupňů), s2 (poloha -45 stupňů), s3 (poloha 45 stupňů), s4 (poloha 135 stupňů).
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.96\textwidth]{pic/Tab4states.png}
+\caption{Všechny možné stavy aplikace}
+\label{fig:Tab4states}
+\end{figure}
+
+\noindent Sekce s výstupními daty nám poskytuje aktuální informace o robotovi v prostoru, o zadaných hodnotách a hodnotách, které jsou výsledkem výpočtů. V sekci jsou zobrazeny tyto parametry: počáteční poloha kamery, směr zvuku přijímaného mikrofonem, údaje ze světelných senzorů, výsledná poloha kamery, aktuální poloha kamery v reálném čase. V sekci s akčními tlačítky, tlačítko \textit{Start} spustí simulaci zařízení na základě zadaných údajů. Tlačítko \textit{Refresh} je aktivní pouze ve stavu ručního zadávání dat a aktualizuje počáteční polohu zařízení na základě zadaných parametrů.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=\textwidth]{pic/RobotApp.png}
+\caption{Přehled visuální části aplikace}
+\label{fig:RobotApp}
+\end{figure}
+
+\noindent Na Obrázku \ref{fig:RobotApp} je zobrazena vizuální část aplikace, s parametry: kde počáteční poloha kamery je ve směru 0 stupňů a zvukový signál přijímaný mikrofonem je ve směru 180 stupňů. Na vizualizaci robota je vidět podlouhlý čtvercový objekt, který je kamerou zařízení. Vlevo od něj je objekt kulatého tvaru, který je mikrofonem zařízení. Kulatý objekt umístěný na 150 stupních je označení zdroje zvuku, v jehož směru se má kamera natočit. Otáčení zařízení se provádí v rozmezí od -180 do 180 stupňů a uplnou otáčku provádí pouze s průchodem polohy 0 stupňů.
+
+
+
+\section{Implementace technologie KWS}
+
+
+
+% _____________________________________________________________________________
+%
+%
+%        CHAPTER
+%
+% _____________________________________________________________________________
+%
+
+% _____________________________________________________________________________
+%
+%
+%        APPENDICES
+%
+% _____________________________________________________________________________
+%
+
+
+\backmatter
+\printbibliography
+\listoffigures
+%\listoftables
+%\listoflistings
+% _____________________________________________________________________________
+%
+%		BACK COVER
+% _____________________________________________________________________________
+%
+\setbackpagesign{img/qr-code}
+\backpage
+\end{document}
